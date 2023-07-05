@@ -1,0 +1,13 @@
+
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bolder!important;
+}
+
+body{
+  background:#eee
+}
+
+.ks-page-content{
+  margin-top:20px;
+}

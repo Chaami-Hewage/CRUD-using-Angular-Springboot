@@ -1,0 +1,240 @@
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<!------ Include the above in your HEAD tag ---------->
+<app-nav-bar-admin *ngIf="authenticationService.isAdmin() === true"></app-nav-bar-admin>
+<app-nav-bar-authenticated *ngIf="authenticationService.isAdmin() === false"></app-nav-bar-authenticated>
+
+<div class="container emp-profile shadow " style="margin-top: 100px" id="main-container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="profile-img">
+        <img *ngIf="this.vAccount?.imageUrl" src="{{this.vAccount?.imageUrl}}"
+             style="margin-bottom: 30px;width: 150px;height: auto;border-radius: 50%" alt=""/>
+        <img *ngIf="this.vAccount?.imageUrl === null" src="../../assets/images/user_default.png"
+             style="margin-bottom: 30px;width: 150px;height: auto;border-radius: 50%" alt=""/>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="profile-head">
+        <a *ngIf="this.pendingRequestId > 0" style="float: right;color: green;font-weight: bold"><i
+          class="fa fa-check"></i> Connection Request Sent </a>
+
+        <button *ngIf="this.pendingRequestId === -1 && this.isPresentInNetwork"
+                (click)="onDisconnect()" style="float: right" type="button" class="btn btn-outline-danger"><i
+          class="fa fa-user-times"></i> Disconnect
+        </button>
+
+        <button *ngIf="this.pendingRequestId === -1 && this.isPresentInNetwork === false && this.authenticationService.isAdmin() === false
+                && this.receivedRequestId === -1"
+                (click)="onConnect()" style="float: right" type="button" class="btn btn-primary"><i
+          class="fa fa-user-plus"> </i> Connect
+        </button>
+
+        <button *ngIf="this.pendingRequestId === -1 && this.isPresentInNetwork === false && this.authenticationService.isAdmin() === false
+                && this.receivedRequestId > 0"
+                (click)="onRemoveRequest(this.receivedRequestId)" style="float: right" type="button"
+                class="btn btn-danger"><i class="fa fa-user-times"> </i> Reject
+        </button>
+
+        <button *ngIf="this.pendingRequestId === -1 && this.isPresentInNetwork === false && this.authenticationService.isAdmin() === false
+                && this.receivedRequestId > 0"
+                (click)="onAcceptRequest(this.receivedRequestId)" style="float: right" type="button"
+                class="btn btn-success mr-2"><i class="fa fa-user-plus"> </i> Accept
+        </button>
+
+        <h5>
+          {{this.vAccount?.firstName}} {{this.vAccount?.lastName}}
+        </h5>
+
+        <h6>
+          {{this.vAccount?.email}}
+        </h6>
+
+        <button *ngIf="this.pendingRequestId > 0"
+                (click)="onRemoveRequest(this.pendingRequestId)" style="float: right;margin-top: -15px" type="button"
+                class="btn btn-danger"><i class="fa fa-times"></i> Cancel request
+        </button>
+
+        <p class="profile-rating">Since {{this.vAccount?.dateCreated}}</p>
+
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#home">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#bio">Bio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#education">Education</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row justify-content-end">
+    <div class="col-md-8">
+      <div class="tab-content profile-tab" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Name</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{vAccount?.lastName}} {{vAccount?.firstName}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Email</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{vAccount?.email}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Phone</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{vAccount?.phone}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h5 class="fs-2 text-secondary">
+                {{this.vAccount?.appUserRole.toString().replace("_", " ")}}
+              </h5>
+              <h6 class="fs-2 fw-bold">
+                Field: <span class="p-2 badge badge-info text-info">{{this.vAccount?.tagName}}</span>
+              </h6>
+            </div>
+          </div>
+          <hr>
+        </div>
+
+        <div class="tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-tab">
+          <div *ngFor="let ed of vAccount?.education" class="row">
+            <div *ngIf="ed.visible" class="col-md-12">
+              <br>
+              <div class="row">
+                <h3><strong>{{ed?.school}}</strong></h3>
+
+                <div class="col-md-6 mt-2" style="font-size: smaller;">
+                  ({{ed?.startDate}} - {{ed?.endDate}})
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Field</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.field}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Degree</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.degree}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>GDP</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.grade}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Description</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.description}}</p>
+                </div>
+              </div>
+              <hr>
+            </div>
+
+            <div *ngIf="this.isPresentInNetwork && (ed.visible === false)" class="col-md-12">
+              <br>
+              <div class="row">
+                <h3><strong>{{ed?.school}}</strong></h3>
+
+                <div class="col-md-6 mt-2" style="font-size: smaller;">
+                  ({{ed?.startDate}} - {{ed?.endDate}})
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Field</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.field}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Degree</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.degree}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>GDP</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.grade}}</p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Description</label>
+                </div>
+                <div class="col-md-6">
+                  <p>{{ed?.description}}</p>
+                </div>
+              </div>
+              <hr>
+
+            </div>
+
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade" id="bio" role="tabpanel" aria-labelledby="bio-tab">
+          <div class="row">
+            <div class="col-md-12">
+              {{this.vAccount?.bio?.description}}
+            </div>
+          </div>
+          <hr>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

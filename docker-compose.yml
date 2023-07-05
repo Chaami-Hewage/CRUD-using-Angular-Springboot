@@ -1,0 +1,36 @@
+version: '3.2'
+
+services:
+  db:
+    image: postgres:alpine
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: postgres
+      POSTGRES_DB: app
+    volumes:
+      - type: volume
+        source: psql_data
+        target: /var/lib/postgresql/data
+    networks: 
+      - app
+    restart: always
+  inventory:
+    image: 'teamup.jar'
+    depends_on:
+        - db
+    ports:
+      - 8444:8444
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/app
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create
+    networks:
+      - app
+    restart: always
+volumes:
+  psql_data:
+networks: 
+  app:

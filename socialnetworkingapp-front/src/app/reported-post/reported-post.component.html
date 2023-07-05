@@ -1,0 +1,228 @@
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+</head>
+
+<app-nav-bar-admin></app-nav-bar-admin>
+<div class="b">
+  <div class="row">
+  <div class="container gedf-wrapper" style="margin-top: 100px;" id="main-container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 gedf-main mr-4">
+         <h2 class="text-center" style="color: #9faecb">Reported posts</h2>
+        <hr/>
+
+        <h4 *ngIf="this.posts.length === 0" style="margin-top: 60px;" class="text-center text-secondary">
+          No posts reported yet :)
+        </h4>
+
+       <!-- Post -->
+
+        <div *ngFor="let post of this.posts" class="card gedf-card shadow-lg" >
+          <div class="card-header" id = "{{post.id}}" style="background-color: white">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="mr-2">
+                  <img *ngIf="post?.authorImage" class="rounded-circle" width="45" src="{{post?.authorImage}}" alt="">
+                  <img *ngIf="post?.authorImage === null" class="rounded-circle" width="45" src="../../assets/images/user_default.png" alt="">
+                </div>
+                <div class="ml-2">
+                  <div class="h5 m-0">{{post?.authorFirstName}} {{post?.authorLastName}}</div>
+                  <div class="h7 text-muted">{{post?.authorEmail}}</div>
+                </div>
+              </div>
+              <div class="row">
+<!--                <button (click)="onClickModal(post, 'editPost')" *ngIf="this.authenticationService.getCurrentUser() === post?.authorEmail" type="button" class="btn" style="color: dimgray;"><i class="fa fa-pencil"></i></button>-->
+                <button (click)="onClickModal(post.id, 'deletePost')" type="button" class="btn" style="color: dimgray"><i class="fa fa-times"></i></button>
+              </div>
+            </div>
+
+          </div>
+          <a (click)="onClickModal(post, 'viewPost')">
+            <div class="card-body" >
+              <span class="p-2 badge badge-info text-info">{{post?.tagName}}</span>
+              <h5 class="card-text mt-2 pt-1">
+
+                <div style="max-height: 100px;overflow-y: auto">
+                  <a *ngIf="post?.payload && (!post?.imagePath && !post?.videoPath && !post?.soundPath)" > {{post?.payload}} </a>
+                  <a *ngIf="post?.payload && (post?.imagePath || post?.videoPath || post?.soundPath)" > {{post?.payload}} <br><br></a>
+                </div>
+
+                <img *ngIf="post?.imagePath !== null" class="card-img mb-2" src="{{post?.imagePath}}" alt="">
+
+
+                <video *ngIf="post?.videoPath !== null" class="card-img mb-2" autoplay controls muted>
+                  <source src="{{post?.videoPath}}" type="video/mp4">
+                  <source src="{{post?.videoPath}}" type="video/ogg">
+                  Your browser does not support the video tag.
+                </video>
+
+                <audio *ngIf="post?.soundPath !== null" class="card-img mb-2" controls>
+                  <source src="{{post?.soundPath}}" type="audio/ogg">
+                  <source src="{{post?.soundPath}}" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+
+                <img width="45" height="auto" src="{{post?.soundPath}}" alt="">
+              </h5>
+
+              <div class="text-muted h7 mb-2" style="float: right"> <i class="fa fa-clock-o"></i> {{post?.date}}</div>
+<!--              <div class="text-muted"> {{this.likedPosts.get(post?.id)[0]}}-->
+<!--                <a *ngIf="this.likedPosts.get(post?.id)[0] !== 1">likes</a>-->
+<!--                <a *ngIf="this.likedPosts.get(post?.id)[0] === 1">like</a>-->
+<!--                <span> &#183;</span>-->
+<!--                {{this.commentedPosts.get(post?.id)[0].length}}-->
+<!--                <a *ngIf="this.commentedPosts.get(post?.id)[0].length !== 1">comments</a>-->
+<!--                <a *ngIf="this.commentedPosts.get(post?.id)[0].length === 1">comment</a>-->
+<!--              </div>-->
+            </div>
+          </a>
+
+    </div>
+  </div>
+
+<!-- Remove Post Modal -->
+<div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletePostModalLabel">Delete post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this post?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button (click)="onDeletePost(this.postIdToDelete)" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove Comment Modal -->
+<div class="modal fade" id="deleteComment" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCommentModalLabel">Delete comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this comment?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button (click)="onDeleteComment(this.commentIdToDelete)" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Post Modal -->
+<div class="modal fade" id="viewPost" tabindex="-1" role="dialog" aria-labelledby="viewPostModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="mr-2">
+              <img *ngIf="this.selectedPost?.authorImage" class="rounded-circle" width="45" src="{{this.selectedPost?.authorImage}}" alt="">
+              <img *ngIf="this.selectedPost?.authorImage === null" class="rounded-circle" width="45" src="../../assets/images/user_default.png" alt="">
+            </div>
+            <div class="ml-2">
+              <div class="h5 m-0">{{this.selectedPost?.authorFirstName}} {{this.selectedPost?.authorLastName}}</div>
+              <div class="h7 text-muted">{{this.selectedPost?.authorEmail}}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="modal-body" *ngIf="selectedPost !== undefined">
+
+        <h5 class="card-text">
+
+          <a *ngIf="this.selectedPost?.payload && (!this.selectedPost?.imagePath && !this.selectedPost?.videoPath && !this.selectedPost?.soundPath)" style="color: black"> {{this.selectedPost?.payload}} </a>
+          <a *ngIf="this.selectedPost?.payload && (this.selectedPost?.imagePath || this.selectedPost?.videoPath || this.selectedPost?.soundPath)" style="color: black"> {{this.selectedPost?.payload}} <br><br></a>
+
+          <img *ngIf="this.selectedPost?.imagePath !== null" class="card-img mb-2" src="{{this.selectedPost?.imagePath}}" style="max-width: 800px;height: auto" alt="">
+
+
+          <video *ngIf="this.selectedPost?.videoPath !== null" class="card-img mb-2" style="max-width: 800px;height: auto" autoplay controls muted>
+            <source src="{{this.selectedPost?.videoPath}}" type="video/mp4">
+            <source src="{{this.selectedPost?.videoPath}}" type="video/ogg">
+            Your browser does not support the video tag.
+          </video>
+
+          <audio *ngIf="this.selectedPost?.soundPath !== null" class="card-img mb-2" controls>
+            <source src="{{this.selectedPost?.soundPath}}" type="audio/ogg">
+            <source src="{{this.selectedPost?.soundPath}}" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+
+          <img width="45" height="auto" src="{{this.selectedPost?.soundPath}}" alt="">
+        </h5>
+
+        <div class="text-muted h7 mb-2" style="float: right"> <i class="fa fa-clock-o"></i> {{this.selectedPost?.date}}</div>
+<!--        <div class="text-muted"> {{this.likedPosts.get(this.selectedPost?.id)[0]}}-->
+<!--          <a *ngIf="this.likedPosts.get(this.selectedPost?.id)[0] !== 1">likes</a>-->
+<!--          <a *ngIf="this.likedPosts.get(this.selectedPost?.id)[0] === 1">like</a>-->
+<!--          <span> &#183;</span>-->
+<!--          {{this.commentedPosts.get(this.selectedPost?.id)[0].length}}-->
+<!--          <a *ngIf="this.commentedPosts.get(this.selectedPost?.id)[0].length !== 1">comments</a>-->
+<!--          <a *ngIf="this.commentedPosts.get(this.selectedPost?.id)[0].length === 1">comment</a>-->
+<!--        </div>-->
+        <br>
+
+        <button class="card-link btn btn-light" data-toggle="collapse" [attr.data-target]="'#collapse' + this.selectedPost.id"
+                aria-expanded="true" aria-controls="collapseOne">
+          <i class="fa fa-comment fa-lg" style="color: royalblue"></i> Comment
+        </button>
+        <hr>
+        <div id="accordion">
+          <div id="collapse{{this.selectedPost.id}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+
+            <div class="blog-comment">
+              <hr *ngIf="this.commentedPosts.get(this.selectedPost.id)[0].length > 0">
+              <ul class="comments">
+
+                <li class="clearfix" *ngFor="let comment of this.commentedPosts.get(this.selectedPost.id)[0]">
+                  <img *ngIf="comment?.authorImage" src="{{comment?.authorImage}}" class="avatar" alt="">
+                  <img *ngIf="comment?.authorImage === null" src="../../assets/images/user_default.png" class="avatar" alt="">
+                  <div class="post-comments">
+                    <p class="meta"> <button (click)="onClickModal([comment.id, this.selectedPost.id], 'deleteComment')" type="button" class="btn" style="color: dimgray;float: right" data-dismiss="modal"><i class="fa fa-times"></i></button>
+                      {{comment?.date}} <a routerLink="/visit/{{comment?.authorEmail}}">{{comment?.authorFirstName}} {{comment?.authorLastName}}</a> says :
+                    </p>
+
+                    <p>
+                      {{comment?.payload}}
+                    </p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+</div>

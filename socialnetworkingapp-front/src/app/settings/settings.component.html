@@ -1,0 +1,193 @@
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<app-nav-bar-admin *ngIf="authenticationService.isAdmin() === true"></app-nav-bar-admin>
+<app-nav-bar-authenticated *ngIf="authenticationService.isAdmin() === false"></app-nav-bar-authenticated>
+<div class="b">
+<br>
+  <br>
+<!--<h1 style="text-align: center;margin-top: 50px; text-shadow: 0 2px 16px rgb(197,67,255);-->
+<!--  color: black; font-weight: bolder">Settings</h1>-->
+<br>
+  <br>
+  <br>
+<div class="container" id="main-container">
+
+
+  <div class="row gutters-sm">
+    <div class="col-md-4 d-none d-md-block">
+      <div class="card">
+        <div class="card-body">
+          <nav class="nav flex-column nav-pills nav-gap-y-1">
+            <a href="#profile" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded active">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user mr-2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Profile Information
+            </a>
+            <a href="#account" data-toggle="tab" class="nav-item nav-link has-icon nav-link-faded">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings mr-2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>Account Settings
+            </a>
+
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header border-bottom mb-3 d-flex d-md-none">
+          <ul class="nav nav-tabs card-header-tabs nav-gap-x-1" role="tablist">
+            <li class="nav-item">
+              <a href="#profile" data-toggle="tab" class="nav-link has-icon active"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></a>
+            </li>
+            <li class="nav-item">
+              <a href="#account" data-toggle="tab" class="nav-link has-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></a>
+            </li>
+
+          </ul>
+        </div>
+        <div class="card-body tab-content">
+          <div class="tab-pane active" id="profile">
+            <h6>YOUR PROFILE INFORMATION</h6>
+            <hr>
+            <form #settingsForm="ngForm">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" class="form-control" ngModel name="firstName" id="firstName" aria-describedby="firstNameHelp" placeholder="Enter your first name" value="{{this.account?.firstName}}">
+                <small id="firstNameHelp" class="form-text text-muted">Your name may appear around here where you are mentioned. You can change or remove it at any time.</small>
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" class="form-control" ngModel name="lastName" id="lastName" aria-describedby="lastNameHelp" placeholder="Enter your last name" value="{{this.account?.lastName}}">
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" class="form-control" ngModel name="phone" id="phone" aria-describedby="phoneHelp" placeholder="Enter your phone" value="{{this.account?.phone}}">
+              </div>
+              <div class="form-group">
+                <label for="image">Profile photo</label>
+                <br>
+                <label class="btn btn-default">
+                  <input type="file" (change)="selectFile($event)" />
+                </label>
+                <div class="alert alert-light" role="alert">{{ message }}</div>
+              </div>
+              <hr>
+              <div class="form-group">
+                <label for="bio">Your Bio</label>
+                <button type="button" (click)="deleteBio()" style="float: right" class="btn btn-outline-danger mb-3">Delete bio</button>
+                <textarea type="text" class="form-control" ngModel name="bio" id="bio" aria-describedby="bioHelp" placeholder="Enter your bio..." value="{{this?.account?.bio?.description}}"></textarea>
+              </div>
+              <button type="button" (click)="upload();updateProfileInformation(settingsForm);" [disabled]="settingsForm.invalid" class="btn btn-primary">Update Profile</button>
+            </form>
+          </div>
+          <div class="tab-pane" id="account">
+            <h6>ACCOUNT SETTINGS</h6>
+            <hr>
+            <form #emailForm="ngForm">
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" ngModel name="email" id="email" aria-describedby="emailHelp" placeholder="Enter your email" value="{{this.account?.email}}" required>
+                <small id="emailHelp" class="form-text text-muted">After changing your email, your old email becomes available for anyone else to claim.</small>
+              </div>
+              <button (click)="onClickModal('updateEmail')" [disabled]="emailForm.invalid" class="btn btn-warning" type="button">Change email</button>
+              <hr>
+            </form>
+              <form #passwordForm="ngForm">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="d-block text-danger">Password</label>
+                </div>
+                <input type="password" class="form-control" ngModel name="password" id="password" aria-describedby="passwordHelp" placeholder="Enter your password" required>
+              </div>
+              <button (click)="onClickModal('updatePass')" [disabled]="passwordForm.invalid" class="btn btn-danger" type="button">Change password</button>
+            <hr>
+              </form>
+
+            <div style="outline-style: dotted;  outline-color: orangered;">
+              <h5 style="margin-top: 5px;margin-left: 5px"> Danger Zone </h5> <br>
+              <button (click)="onClickModal('deleteAccount')" class="btn btn-danger ml-2 mb-1" type="button">Delete account</button>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Confirm password modal for email -->
+<div class="modal fade" id="updateEmail" tabindex="-1" role="dialog" aria-labelledby="updateEmailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateEmailModalLabel">Confirm password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Enter your current password, in order to proceed.
+        <form #confirmEmail="ngForm">
+          <input type="password" class="form-control" ngModel name="password" id="conf_email" aria-describedby="passwordHelp" placeholder="Enter your password" required>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button (click)="updateEmail(emailForm.value.email, confirmEmail.value.password)" type="button" class="btn btn-warning"  data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm password modal for password -->
+<div class="modal fade" id="updatePass" tabindex="-1" role="dialog" aria-labelledby="updatePassModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updatePassModalLabel">Confirm password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Enter your current password, in order to proceed.
+        <form #confirmPassword="ngForm">
+          <input type="password" class="form-control" ngModel name="password" id="confPassword" aria-describedby="passwordHelp" placeholder="Enter your password" required>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button (click)="updatePassword(passwordForm.value.password, confirmPassword.value.password)" type="button" class="btn btn-danger"  data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete account modal -->
+<div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteAccountModalLabel">Remove account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your account? <br>
+        <strong>Everything</strong> related to you will be removed <a style="color: red;font-weight: bold">permanently</a>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button (click)="deleteAccount()" type="button" class="btn btn-danger"  data-dismiss="modal">Delete my account</button>
+      </div>
+    </div>
+  </div>
+</div>
+  <br>
+  <br>
+</div>
+

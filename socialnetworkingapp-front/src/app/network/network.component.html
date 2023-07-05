@@ -1,0 +1,66 @@
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+</head>
+<app-nav-bar-authenticated></app-nav-bar-authenticated>
+
+<div class="b">
+  <div class="container" id="main-container" >
+    <br>
+    <br>
+    <br>
+    <h1 style="text-align: center;margin-top: 50px; color: #9faecb"><i class="fa fa-users"></i>  Network</h1>
+    <br>
+    <form #searchForm="ngForm" style="float: right; margin-right: 200px">
+      <div class="input-group">
+        <div class="form-outline mr-1">
+          <input id="search-input" ngModel (ngModelChange)="onSearchSimilar(searchForm)" name="keyword" type="search" id="form1" class="form-control" placeholder="Search by name" required />
+        </div>
+        <button [disabled]="searchForm.invalid" (click)="onSearchSimilar(searchForm)" id="search-button" type="submit" class="btn btn-primary mr-1">
+          <i class="fa fa-search"></i>
+        </button>
+        <button (click)="refresh();" id="reload" type="submit" class="btn btn-primary mr-1">
+          Reload Network
+        </button>
+      </div>
+    </form>
+
+    <br>
+    <br>
+
+    <h4 style="text-align: center;color:#9faecb; margin-top: 50px" *ngIf="this.accounts.length === 0" >
+      No connections yet! <br><br>
+      Search for some users in the search bar <i class="fa fa-search"></i> and start connecting!
+    </h4>
+
+    <div class="grid-container">
+      <div class="container" *ngFor="let account of accounts">
+        <div routerLink="../visit/{{account?.email}}" class="card shadow">
+          <div class="imgBx">
+            <img *ngIf="account?.imageUrl" src="{{this.account?.imageUrl}}"/>
+            <img *ngIf="account?.imageUrl === null" src="../../assets/images/user_default.png"/>
+          </div>
+          <div class="contentBx">
+            <h2 style="color: black;margin-bottom: 10px">{{account?.firstName}}  {{account?.lastName}}</h2>
+
+            <div class="size">
+              <h3 style="color: black">{{account?.email}}</h3>
+              <br><br>
+            </div>
+            <!--          <div *ngIf="account?.position !== null && account?.company !== null" class="color">-->
+            <!--              <h3 style="color: black"> Working as {{account?.position}} at {{account?.company}} </h3>-->
+            <!--          </div>-->
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+</div>

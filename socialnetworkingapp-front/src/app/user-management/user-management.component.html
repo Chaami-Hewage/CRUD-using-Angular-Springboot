@@ -1,0 +1,289 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="b">
+<app-nav-bar-admin></app-nav-bar-admin>
+<div class="container" id="main-container" style="margin-top: 70px">
+
+  <br>
+  <form #searchForm="ngForm">
+  <div class="input-group">
+    <div class="form-outline mr-1">
+      <input id="search-input" ngModel (ngModelChange)="onSearchSimilar(searchForm)" name="keyword" type="search" id="form1" class="form-control" placeholder="Search by name" required />
+    </div>
+    <button [disabled]="searchForm.invalid" (click)="onSearchSimilar(searchForm)" id="search-button" type="submit" class="btn btn-primary mr-1">
+      <i class="fa fa-search"></i>
+    </button>
+    <button (click)="getAccounts()" id="reload" type="submit" class="btn btn-primary mr-1">
+      Reload all
+    </button>
+    <button (click)="onClickModal(null, 'add')" id="addAccountModal" type="submit"  class="btn btn-outline-success mr-4">
+      Add account
+    </button>
+    <!-- Example single danger button -->
+    <div class="btn-group">
+      <!--<button type="button" class="btn btn-outline-info dropdown-toggle mr-1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export XML
+      </button>-->
+      <div class="dropdown-menu">
+        <a class="dropdown-item" (click)="this.onExportSelectedXML('all')">All</a>
+        <a class="dropdown-item" (click)="this.onExportSelectedXML('sel')">Selected</a>
+      </div>
+    </div>
+    <div class="btn-group">
+      <!--<button type="button" class="btn btn-outline-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export JSON
+      </button>-->
+      <div class="dropdown-menu">
+        <a class="dropdown-item" (click)="this.onExportSelectedJSON('all')">All</a>
+        <a class="dropdown-item" (click)="this.onExportSelectedJSON('sel')">Selected</a>
+      </div>
+    </div>
+  </div>
+  </form>
+  <br>
+
+  <div class="row">
+    <!--<div class="col-lg-12">-->
+    <div class="col-lg-12">
+      <div class="main-box clearfix">
+        <div class="table-responsive" style="overflow-x: hidden; overflow-y: auto; height: 800px;">
+          <table class="table user-list">
+            <thead>
+            <tr style="color: white">
+              <th><span>User</span></th>
+              <th><span>Created</span></th>
+              <th><span>Email</span></th>
+              <th><span>Select</span></th>
+              <th><span>Actions</span></th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+
+            <tr *ngFor="let account of this.accounts">
+              <td>
+                <img *ngIf="account?.imageUrl !== null" src="{{account?.imageUrl}}" alt="">
+                <img *ngIf="account?.imageUrl === null" src="../../assets/images/user_default.png" alt="">
+                <a class="user-link" routerLink="/visit/{{account?.email}}"> {{account?.firstName}} {{account?.lastName}} </a>
+
+              </td>
+              <td>
+                {{account?.dateCreated}}
+              </td>
+              <td>
+                {{account?.email}}
+              </td>
+              <td>
+                <div class="custom-control custom-checkbox" >
+                  <input (click)="onSelectUser(account)" type="checkbox" class="custom-control-input" id="checkBoxNo{{account?.id}}">
+                  <label class="custom-control-label" for="checkBoxNo{{account?.id}}"></label>
+                </div>
+              </td>
+              <td style="width: 20%;">
+                <button (click)="onClickModal(account, 'info')" type="button" class="btn btn-outline-primary mr-3" data-placement="top" data-original-title="Info"> <i class="fa fa-question"></i> </button>
+                <button (click)="onClickModal(account, 'remove')" type="button" class="btn btn-outline-danger" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></button>
+              </td>
+            </tr>
+            </tbody>
+
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Info Modal -->
+<div class="modal fade bd-example-modal-lg" id="info" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="infoModal">User info</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="grid-container">
+          <div class="left"><strong>First Name</strong></div>
+          <div class="right">{{infoAccount?.firstName}}</div>
+          <div class="left"><strong>Last Name</strong></div>
+          <div class="right">{{infoAccount?.lastName}}</div>
+          <div class="left"><strong>Email</strong></div>
+          <div class="right">{{infoAccount?.email}}</div>
+          <div class="left"><strong>Phone</strong></div>
+          <div class="right">{{infoAccount?.phone}}</div>
+          <div class="left"><strong>Image</strong></div>
+          <div class="right">{{infoAccount?.imageUrl}}</div>
+          <div class="left"><strong>Date</strong></div>
+          <div class="right">{{infoAccount?.dateCreated}}</div>
+          <div class="left"><strong>Bio</strong></div>
+          <div class="right" style="overflow-x: scroll;overflow-y: auto">{{infoAccount?.bio?.description}}</div>
+
+<!--          <div class="left"><strong>Interests</strong></div>-->
+<!--          <div class="right"><strong>Share:</strong>-->
+<!--            <a *ngIf="infoAccount?.visibleTags" > Public </a>-->
+<!--            <a *ngIf="infoAccount?.visibleTags !== true" > Private </a>-->
+<!--          </div>-->
+<!--          <div *ngFor="let tag of infoAccount?.tags" class="right"> {{tag?.tag}} </div>-->
+
+
+<!--          <div class="left"><strong>Experience</strong></div>-->
+<!--          <div class="right" *ngFor="let xp of infoAccount?.experience">-->
+<!--            <div class="right"><strong>Share:</strong>-->
+<!--              <a *ngIf="xp?.visible" > Public </a>-->
+<!--              <a *ngIf="xp?.visible !== true" > Private </a>-->
+<!--            </div>-->
+<!--            <div class="right"><strong>Headline:</strong>  {{xp?.headline}}</div>-->
+<!--            <div class="right"><strong>Title:</strong> {{xp?.title}}</div>-->
+<!--            <div class="right"><strong>Employment Type:</strong> {{xp?.employmentType}}</div>-->
+<!--            <div class="right"><strong>Company:</strong> {{xp?.company}}</div>-->
+<!--            <div class="right"><strong>Location:</strong> {{xp?.location}}</div>-->
+<!--            <div class="right"><strong>Start date:</strong> {{xp?.startDate}}</div>-->
+<!--            <div class="right"><strong>End date:</strong> {{xp?.endDate}}</div>-->
+<!--            <div class="right" style="width: 570px;overflow-x: scroll"><strong>Description:</strong> {{xp?.description}}</div>-->
+<!--          </div>-->
+
+          <div class="left"><strong>Education</strong></div>
+          <div class="right"   *ngFor="let ed of infoAccount?.education">
+            <div class="right"><strong>Share:</strong>
+              <a *ngIf="ed?.visible" > Public </a>
+              <a *ngIf="ed?.visible !== true" > Private </a>
+            </div>
+
+            <div class="right"><strong>School:</strong> {{ed?.school}}</div>
+            <div class="right"><strong>Degree:</strong> {{ed?.degree}}</div>
+            <div class="right"><strong>Field:</strong> {{ed?.field}}</div>
+            <div class="right"><strong>Grade:</strong> {{ed?.grade}}</div>
+            <div class="right"><strong>Start date:</strong> {{ed?.startDate}}</div>
+            <div class="right"><strong>End date:</strong> {{ed?.endDate}}</div>
+            <div class="right" style="width: 570px;overflow-x: scroll"><strong>Description:</strong> {{ed?.description}}</div>
+          </div>
+
+          <div class="left"><strong>Network</strong></div>
+          <div class="right" *ngFor="let user of infoAccount?.network">
+            <div class="right">{{user?.email}}</div>
+          </div>
+
+
+        </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Remove Modal -->
+<div class="modal fade" id="remove" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeModalLabel">Delete account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete user <strong>{{deleteAccount?.email}}</strong> ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button (click)="onDeleteAccount(deleteAccount)" type="submit" class="btn btn-danger" data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Add user modal-->
+<div class="modal fade" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+<!--        <h5 class="modal-title" id="addModal">Add account</h5>-->
+<!--        <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--          <span aria-hidden="true">×</span>-->
+<!--        </button>-->
+      </div>
+      <div class="modal-body">
+
+        <div class="card-body tab-content">
+          <div class="tab-pane active" id="prof">
+            <form #addForm="ngForm">
+
+              <input type="hidden" ngModel class="form-control" name="appUserRole" aria-describedby="roleHelp" value="USER">
+
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" ngModel class="form-control" name="firstName" aria-describedby="firstNameHelp" >
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" ngModel class="form-control" name="lastName" aria-describedby="lastNameHelp" >
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" ngModel class="form-control" name="email" aria-describedby="emailHelp" required>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text" ngModel class="form-control" name="phone" aria-describedby="phoneHelp" required>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="text" ngModel class="form-control" name="password" id="password" aria-describedby="pwdHelp" required/>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button  [disabled]="addForm.invalid" (click)="onAddAccount(addForm.value);onClickModal(null, 'addPhoto')" type="submit" class="btn btn-success" data-dismiss="modal">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Photo Modal -->
+<div class="modal fade" id="addPhoto" tabindex="-1" role="dialog" aria-labelledby="addPhotoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-zoom" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addPhotoModalLabel">Add a photo to an account</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        Every account is better with a picture!
+      </div>
+
+      <label class="btn btn-default">
+        <input type="file" (change)="selectFile($event)" />
+      </label>
+      <div class="alert alert-light" role="alert">{{ message }}</div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button class="btn btn-primary" [disabled]="!selectedFiles" (click)="upload(addForm.value.email);getAccounts()">
+          Upload
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

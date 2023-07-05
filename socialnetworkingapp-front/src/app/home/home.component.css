@@ -1,0 +1,145 @@
+* {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bolder;
+
+}
+
+.row{
+  /*background-image: linear-gradient(135deg, #bdc2e8 10%, #e6dee9 100%);*/
+  box-shadow: 0 2px 16px rgba(254,234,207,20);
+  background-color: rgba(32, 35, 35, 0.5);
+
+}
+.b {
+  background-image: url("../../assets/images/home_background_image.png");
+  margin: auto;
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-attachment: fixed;
+
+
+}
+
+
+body {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.h7 {
+  font-size: 0.8rem;
+}
+
+.gedf-wrapper {
+  margin-top: 0.97rem;
+  min-width: 150vh;
+}
+
+.badge-info{
+  background-color: #e7f5fe;
+  color: inherit;
+
+}
+
+@media (min-width: 992px) {
+  .gedf-main {
+    padding-left: 0rem;
+    padding-right: 0rem;
+  }
+  .gedf-card {
+    margin-bottom: 2.77rem;
+  }
+}
+
+/**Reset Bootstrap*/
+.dropdown-toggle::after {
+  content: none;
+  display: none;
+}
+
+
+a {
+  color: royalblue;
+  text-decoration: none;
+}
+.blog-comment::before,
+.blog-comment::after,
+.blog-comment-form::before,
+.blog-comment-form::after{
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
+.blog-comment ul{
+  list-style-type: none;
+  padding: 0;
+}
+
+.blog-comment img{
+  opacity: 1;
+  filter: Alpha(opacity=100);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.blog-comment img.avatar {
+  position: relative;
+  float: left;
+  margin-left: 0;
+  margin-top: 0;
+  width: 50px;
+  height: auto;
+  border-radius: 30%;
+}
+
+.blog-comment .post-comments{
+  border: 1px solid #eee;
+  margin-bottom: 20px;
+  margin-left: 85px;
+  margin-right: 0px;
+  padding: 10px 20px;
+  position: relative;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  background: #fff;
+  color: #6b6e80;
+  position: relative;
+}
+
+.blog-comment .meta {
+  font-size: 13px;
+  color: #aaaaaa;
+  padding-bottom: 8px;
+  margin-bottom: 10px !important;
+  border-bottom: 1px solid #eee;
+}
+
+.blog-comment ul.comments ul{
+  list-style-type: none;
+  padding: 0;
+  margin-left: 85px;
+}
+
+.blog-comment-form{
+  padding-left: 15%;
+  padding-right: 15%;
+  padding-top: 40px;
+}
+
+.blog-comment h3,
+.blog-comment-form h3{
+  margin-bottom: 40px;
+  font-size: 26px;
+  line-height: 30px;
+  font-weight: 800;
+}
+
+/*for the backgroung image
+ */
+
+/* home.component.css */
